@@ -16,52 +16,19 @@
  */
 package com.netflix.hollow.diff.ui.jetty;
 
-import com.netflix.hollow.diff.ui.HollowDiffUI;
-import com.netflix.hollow.tools.diff.HollowDiff;
-
-public class HollowDiffUIServer {
-    private static final UIServer.Factory FACTORY = new OptionalDependencyHelper().uiServerFactory();
-
-    private final UIServer server;
+/**
+ * @deprecated
+ * This class is replaced by {@link com.netflix.hollow.diff.ui.webserver.HollowDiffUIServer}
+ */
+@Deprecated
+public class HollowDiffUIServer  extends com.netflix.hollow.diff.ui.webserver.HollowDiffUIServer {
 
     public HollowDiffUIServer() {
-        this(8080);
+        super();
     }
 
     public HollowDiffUIServer(int port) {
-        this.server = FACTORY.newServer(port);
+        super(port);
     }
 
-    public HollowDiffUI addDiff(String diffPath, HollowDiff diff) {
-        return addDiff(diffPath, diff, "FROM", "TO");
-    }
-
-    public HollowDiffUI addDiff(String diffPath, HollowDiff diff, String fromBlobName, String toBlobName) {
-        return server.addDiff(diffPath, diff, fromBlobName, toBlobName);
-    }
-
-    public HollowDiffUIServer start() throws Exception {
-        server.start();
-        return this;
-    }
-
-    public void stop() throws Exception {
-        server.stop();
-    }
-
-    public HollowDiffUIServer join() throws InterruptedException {
-        server.join();
-        return this;
-    }
-
-    static interface UIServer {
-        void start() throws Exception;
-        void stop() throws Exception;
-        void join() throws InterruptedException;
-        public HollowDiffUI addDiff(String diffPath, HollowDiff diff, String fromBlobName, String toBlobName);
-
-        static interface Factory {
-            UIServer newServer(int port);
-        }
-    }
 }

@@ -14,10 +14,16 @@
  *     limitations under the License.
  *
  */
-package com.netflix.hollow.ui.jetty;
+package com.netflix.hollow.explorer.ui.webserver;
 
-public class OptionalDependencyException extends RuntimeException {
-    private static final long serialVersionUID = -6846312004135030988L;
-    public OptionalDependencyException(String message) { super(message); }
-    public OptionalDependencyException(String message, Throwable cause) { super(message, cause); }
+import com.netflix.hollow.explorer.ui.HollowExplorerUI;
+import com.netflix.hollow.ui.HttpHandlerWithServletSupport;
+import com.netflix.hollow.ui.UIBaseWebServer;
+
+final class UIWebServer extends UIBaseWebServer {
+
+    public UIWebServer(HollowExplorerUI ui, int port) {
+        super(new HttpHandlerWithServletSupport(ui), port);
+    }
+
 }

@@ -14,33 +14,51 @@
  *     limitations under the License.
  *
  */
-package com.netflix.hollow.explorer.ui.jetty;
+package com.netflix.hollow.explorer.ui.webserver;
 
 import com.netflix.hollow.api.client.HollowClient;
 import com.netflix.hollow.api.consumer.HollowConsumer;
 import com.netflix.hollow.core.read.engine.HollowReadStateEngine;
 import com.netflix.hollow.explorer.ui.HollowExplorerUI;
+import com.netflix.hollow.ui.UIServer;
 
-/**
- * @deprecated
- * This class is replaced by {@link com.netflix.hollow.explorer.ui.webserver.HollowExplorerUIServer}
- */
-@Deprecated
-public class HollowExplorerUIServer extends com.netflix.hollow.explorer.ui.webserver.HollowExplorerUIServer {
+public class HollowExplorerUIServer {
+    private final UIServer server;
+    private final HollowExplorerUI ui;
 
     public HollowExplorerUIServer(HollowReadStateEngine readEngine, int port) {
-        super( readEngine, port);
+        this(new HollowExplorerUI("", readEngine), port);
     }
 
     public HollowExplorerUIServer(HollowConsumer consumer, int port) {
-        super( consumer, port);
+        this(new HollowExplorerUI("", consumer), port);
     }
 
     public HollowExplorerUIServer(HollowClient client, int port) {
-        super( client, port);
+        this(new HollowExplorerUI("", client), port);
     }
 
     public HollowExplorerUIServer(HollowExplorerUI ui, int port) {
-        super(ui, port);
+        this.server = new UIWebServer(ui, port);
+        this.ui = ui;
     }
+
+    public HollowExplorerUIServer start() throws Exception {
+        server.start();
+        return this;
+    }
+
+    public HollowExplorerUIServer join() throws InterruptedException {
+        server.join();
+        return this;
+    }
+
+    public void stop() throws Exception {
+        server.stop();
+    }
+
+    public HollowExplorerUI getUI() {
+        return ui;
+    }
+
 }
